@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Wand2, Copy, ExternalLink } from 'lucide-react'
 import { ImageUploader } from '@/components/generate/image-uploader'
+import { usePersistentState } from '@/hooks/use-persistent-state'
 import Link from 'next/link'
 
 interface FormData {
@@ -17,7 +18,7 @@ interface FormData {
 
 export default function GeneratePage() {
   const [images, setImages] = useState<File[]>([])
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = usePersistentState<FormData>('ai-sell-easy-form-data', {
     title: '',
     description: '',
     price: '',
@@ -43,6 +44,8 @@ export default function GeneratePage() {
     }
 
     setGeneratingCopy(true)
+    const startTime = Date.now()
+    
     try {
       const formDataObj = new FormData()
       images.forEach((image, index) => {
@@ -54,11 +57,43 @@ export default function GeneratePage() {
         body: formDataObj,
       })
 
+      const responseTime = Date.now() - startTime
+
       if (!response.ok) {
-        throw new Error('Failed to generate copy')
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+        
+        // Log detailed error information
+        const errorLog = {
+          timestamp: new Date().toISOString(),
+          error: 'API Error',
+          status: response.status,
+          statusText: response.statusText,
+          responseTime,
+          imageCount: images.length,
+          userAgent: navigator.userAgent,
+          url: window.location.href,
+          errorData
+        }
+        
+        console.error('API Error:', errorLog)
+        
+        // Store error for debugging
+        try {
+          const existingErrors = JSON.parse(localStorage.getItem('api_errors') || '[]')
+          existingErrors.push(errorLog)
+          localStorage.setItem('api_errors', JSON.stringify(existingErrors.slice(-20)))
+        } catch (e) {
+          console.error('Failed to store API error:', e)
+        }
+        
+        throw new Error(`API Error: ${response.status} ${errorData.error || response.statusText}`)
       }
 
       const data = await response.json()
+      
+      // Log successful generation
+      console.log(`AI generation successful in ${responseTime}ms`)
+      
       setFormData(prev => ({
         ...prev,
         title: data.title || prev.title,
@@ -69,7 +104,30 @@ export default function GeneratePage() {
         model: data.model || prev.model,
       }))
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
       console.error('Error generating copy:', error)
+      
+      // Enhanced error logging
+      const errorLog = {
+        timestamp: new Date().toISOString(),
+        error: 'Generation Error',
+        message: errorMessage,
+        stack: error instanceof Error ? error.stack : undefined,
+        responseTime: Date.now() - startTime,
+        imageCount: images.length,
+        imageSizes: images.map(img => ({ name: img.name, size: img.size, type: img.type })),
+        userAgent: navigator.userAgent,
+        url: window.location.href
+      }
+      
+      try {
+        const existingErrors = JSON.parse(localStorage.getItem('generation_errors') || '[]')
+        existingErrors.push(errorLog)
+        localStorage.setItem('generation_errors', JSON.stringify(existingErrors.slice(-20)))
+      } catch (e) {
+        console.error('Failed to store generation error:', e)
+      }
+      
       setToastMessage('Erreur lors de la génération. Réessayez.')
       setTimeout(() => setToastMessage(''), 2000)
     } finally {

@@ -39,7 +39,83 @@ export function ImageUploader({ images, onImagesChange }: ImageUploaderProps) {
       file => file.type.startsWith('image/')
     )
     
-    onImagesChange([...images, ...files])
+    // Limit file size for mobile compatibility (5MB per image)
+    const validFiles = files.filter(file => {
+      if (file.size > 5 * 1024 * 1024) {
+        console.warn(`File ${file.name} is too large (${Math.round(file.size / 1024 / 1024)}MB). Maximum size is 5MB.`)
+        return false
+      }
+      return true
+    })
+    
+    // Process files one by one to avoid memory issues on mobile
+    if (validFiles.length > 0) {
+      const processFiles = async () => {
+        const processedFiles: File[] = []
+        
+        for (const file of validFiles) {
+          try {
+            // Create a smaller version for mobile devices
+            const processedFile = await optimizeImageForMobile(file)
+            processedFiles.push(processedFile)
+          } catch (error) {
+            console.error(`Error processing ${file.name}:`, error)
+            // Fallback to original file if processing fails
+            processedFiles.push(file)
+          }
+        }
+        
+        onImagesChange([...images, ...processedFiles])
+      }
+      
+      processFiles()
+    }
+  }
+
+  // Optimize images for mobile compatibility
+  const optimizeImageForMobile = (file: File): Promise<File> => {
+    return new Promise((resolve) => {
+      // If file is already small enough, return as-is
+      if (file.size <= 1024 * 1024) { // 1MB
+        resolve(file)
+        return
+      }
+
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      const img = document.createElement('img')
+      
+      img.onload = () => {
+        // Calculate new dimensions (max 1920px width, maintain aspect ratio)
+        const maxWidth = 1920
+        const ratio = Math.min(maxWidth / img.width, maxWidth / img.height)
+        
+        canvas.width = img.width * ratio
+        canvas.height = img.height * ratio
+        
+        // Draw and compress
+        ctx?.drawImage(img, 0, 0, canvas.width, canvas.height)
+        
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              const optimizedFile = new File([blob], file.name, {
+                type: 'image/jpeg',
+                lastModified: Date.now()
+              })
+              resolve(optimizedFile)
+            } else {
+              resolve(file) // Fallback to original
+            }
+          },
+          'image/jpeg',
+          0.8 // 80% quality
+        )
+      }
+      
+      img.onerror = () => resolve(file) // Fallback to original
+      img.src = URL.createObjectURL(file)
+    })
   }
 
   const removeImage = (index: number) => {
