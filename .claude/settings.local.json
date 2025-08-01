@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm:*)",
+      "Bash(gcloud ai models list:*)",
+      "Bash(gcloud config get-value:*)",
+      "Bash(gcloud auth:*)",
+      "Bash(gcloud ai endpoints:*)",
+      "Bash(gcloud projects get-iam-policy:*)",
+      "Bash(gcloud alpha aiplatform model-garden models enable:*)",
+      "Bash(gcloud services enable:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run dev:*)",
+      "WebFetch(domain:www.ricardo.ch)",
+      "Bash(mv:*)"
+    ],
+    "deny": []
+  }
+}
