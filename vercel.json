@@ -7,8 +7,5 @@
     "app/api/**/*.ts": {
       "maxDuration": 60
     }
-  },
-  "env": {
-    "GOOGLE_AI_API_KEY": "@google_ai_api_key"
   }
 }
