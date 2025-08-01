@@ -14,7 +14,7 @@ async function callGeminiAPI(prompt: string, images: Buffer[]): Promise<string> 
   }
 
   // Prepare the request body
-  const parts = [{ text: prompt }]
+  const parts: any[] = [{ text: prompt }]
   
   // Add images to the request
   for (const imageBuffer of images) {
