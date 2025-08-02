@@ -1,17 +1,17 @@
 # AI Sell-Easy
 
-Application web moderne qui utilise l'IA pour générer des descriptions attrayantes pour vos annonces Ricardo. Téléchargez vos photos, laissez l'IA créer le titre et la description parfaits, puis copiez-collez sur Ricardo.
+A modern web application that uses AI to generate attractive descriptions for your marketplace listings. Upload your photos, let AI create the perfect title and description, then copy-paste to your favorite marketplace.
 
-## Features
+## ✨ Features
 
-- 🤖 **Génération IA**: Utilise Google AI (Gemini 1.5 Flash) pour analyser les images et générer des descriptions
-- 📸 **Upload d'images**: Support de plusieurs images avec drag-and-drop
-- 📋 **Copie facile**: Boutons pour copier chaque champ directement
-- 🌐 **Intégration Ricardo**: Lien direct vers la création d'annonce Ricardo
-- 📱 **Design responsive**: Interface moderne qui fonctionne sur tous les appareils
-- ⚡ **Ultra-rapide**: Aucune authentification, aucune base de données
+- 🤖 **AI Generation**: Uses Google AI (Gemini 1.5 Flash) to analyze images and generate descriptions
+- 📸 **Image Upload**: Support for multiple images with drag-and-drop
+- 📋 **Easy Copy**: Buttons to copy each field directly
+- 🌐 **Marketplace Ready**: Generated content works for any marketplace (eBay, Facebook, Craigslist, etc.)
+- 📱 **Responsive Design**: Modern interface that works on all devices
+- ⚡ **Ultra-fast**: No authentication, no database required
 
-## Technology Stack
+## 🛠️ Technology Stack
 
 - **Framework**: Next.js 14 (App Router)  
 - **Language**: TypeScript
@@ -20,16 +20,21 @@ Application web moderne qui utilise l'IA pour générer des descriptions attraya
 - **AI**: Google AI (Gemini 1.5 Flash)
 - **Hosting**: Vercel
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
 - Node.js 18+ and npm
-- Google AI API Key (gratuite sur https://aistudio.google.com/)
+- Google AI API Key (free at https://aistudio.google.com/)
 
 ### Installation
 
-1. Clone the repository
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/ai-selleasy.git
+   cd ai-selleasy
+   ```
+
 2. Install dependencies:
    ```bash
    npm install
@@ -52,40 +57,57 @@ Application web moderne qui utilise l'IA pour générer des descriptions attraya
 
 6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-### Comment obtenir la clé Google AI
+### How to get Google AI API Key
 
-1. Allez sur https://aistudio.google.com/
-2. Connectez-vous avec votre compte Google
-3. Cliquez sur "Get API Key" → "Create API Key"
-4. Sélectionnez votre projet Google Cloud
-5. Copiez la clé générée dans votre `.env.local`
+1. Go to https://aistudio.google.com/
+2. Sign in with your Google account
+3. Click "Get API Key" → "Create API Key"
+4. Select your Google Cloud project
+5. Copy the generated key to your `.env.local`
 
-1. **Téléchargez vos images** 📸
-2. **Cliquez "Générer avec IA"** 🤖 
-3. **Copiez les champs un par un** 📋
-4. **Cliquez "Ouvrir Ricardo.ch"** 🔗
-5. **Collez sur Ricardo** ✨
+## 📖 How to Use
 
-## API Endpoint
+1. **Upload your images** 📸
+2. **Click "Generate with AI"** 🤖 
+3. **Copy the fields one by one** 📋
+4. **Open your marketplace** 🔗
+5. **Paste and publish** ✨
 
-- `/api/generate-copy` - Génération IA des descriptions
+## 🔧 API Endpoints
 
-## Déploiement sur Vercel
+- `/api/generate-copy` - AI description generation
 
-Voir le guide détaillé dans [DEPLOY.md](./DEPLOY.md)
+## 🚀 Deploy on Vercel
+
+See detailed guide in [DEPLOY.md](./DEPLOY.md)
 
 ```bash
-# Installation Vercel CLI
+# Install Vercel CLI
 npm install -g vercel
 
-# Déploiement
+# Deploy
 npm run deploy
 ```
 
-**Configuration requise :**
-- Variable `GOOGLE_AI_API_KEY` dans Vercel Dashboard
+**Required configuration:**
+- `GOOGLE_AI_API_KEY` environment variable in Vercel Dashboard
 
-## License
+## 🤝 Contributing
 
-This project is licensed under the MIT License.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Google AI for providing the Gemini 1.5 Flash model
+- Next.js team for the amazing framework
+- Tailwind CSS for the utility-first CSS framework

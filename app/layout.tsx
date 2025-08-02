@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'AI Sell-Easy',
-  description: 'Générateur IA de descriptions pour Ricardo',
+  description: 'AI-powered product listing description generator',
 }
 
 export default function RootLayout({
@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="fr">
+    <html lang="en">
       <body className={`${inter.className} bg-slate-900`}>
         <ErrorBoundary>
           {children}

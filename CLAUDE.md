@@ -16,54 +16,45 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Framework**: Next.js 14 with App Router
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS with slate/violet/sky color scheme
-- **Authentication**: Firebase Auth with Google Sign-In
-- **Database**: Cloud Firestore
-- **AI**: Google Vertex AI (Gemini Pro Vision) for image analysis and copy generation
-- **Storage**: Google Cloud Storage for image uploads
+- **AI**: Google AI (Gemini 1.5 Flash) for image analysis and copy generation
+- **No Authentication**: Direct API usage without user accounts
+- **No Database**: Stateless application with local storage for form persistence
 
 ### Core Application Flow
-1. Users authenticate via Google Sign-In through Firebase Auth
-2. Upload product images via drag-and-drop interface
-3. Images are analyzed by Vertex AI to generate sales copy (title/description)
-4. Items are stored in Firestore with user association
-5. Users can view and manage their listings in the dashboard
+1. Users upload product images via drag-and-drop interface
+2. Images are analyzed by Google AI to generate marketplace copy (title/description)
+3. Generated content is displayed with copy-to-clipboard functionality
+4. Users can copy fields individually and paste to any marketplace
+5. Form data persists locally across sessions
 
 ### Key Directories
 - `app/` - Next.js App Router pages and API routes
 - `components/` - Reusable React components organized by feature
-- `contexts/` - React Context providers (AuthContext)
+- `hooks/` - Custom React hooks for state management
 - `lib/` - Service modules for external integrations
 - `types/` - TypeScript type definitions
 
 ### Service Modules (`lib/`)
-- `firebase.ts` - Client-side Firebase configuration
-- `firebase-admin.ts` - Server-side Firebase Admin SDK
-- `vertex-ai.ts` - AI copy generation using Gemini Pro Vision
-- `storage.ts` - Google Cloud Storage operations
+- `vertex-ai.ts` - AI copy generation using Google AI (Gemini 1.5 Flash)
 
 ### Core Data Model
-Items are the primary entity with properties: id, userId, title, description, price, imageUrls, status ('listed'|'sold'), createdAt.
+Form data includes: title, description, price, category, brand, model. Data persists locally using localStorage.
 
-### Authentication Pattern
-Uses Firebase Auth with React Context. The AuthProvider wraps the entire app in `app/layout.tsx`. Components use the `useAuth()` hook to access user state and auth methods.
+### State Management
+Uses custom React hooks and localStorage for form persistence. No authentication required - direct API usage.
 
 ### API Routes
 - `/api/generate-copy` - POST endpoint for AI copy generation from images
-- `/api/items/create` - POST endpoint for creating new listings
-- `/api/items/mark-as-sold` - POST endpoint for updating item status
 
 ### Environment Setup
-The app includes demo Firebase configuration that allows development without real credentials. For full functionality, configure `.env.local` with actual Firebase and Google Cloud credentials. See `SETUP.md` for detailed setup instructions.
+Minimal setup required. Configure `.env.local` with Google AI API key from https://aistudio.google.com/. See `README.md` for detailed setup instructions.
 
-### Google Cloud / Vertex AI Setup
+### Google AI Setup
 For AI copy generation to work:
-1. Install Google Cloud CLI: `brew install --cask google-cloud-sdk`
-2. Authenticate: `gcloud auth application-default login`
-3. Set project: `gcloud config set project ai-selleasy`
-4. Enable Vertex AI API: `gcloud services enable aiplatform.googleapis.com`
-5. Enable Gemini model access in Vertex AI Model Garden (manual step required)
+1. Get a free API key from https://aistudio.google.com/
+2. Add `GOOGLE_AI_API_KEY` to your `.env.local` file
 
-Note: The application uses `gemini-1.5-flash` model for image analysis and sales copy generation.
+Note: The application uses `gemini-1.5-flash` model for image analysis and marketplace copy generation.
 
 ### Error Handling
-The app gracefully handles demo mode with fallback configurations and user-friendly error messages when external services are not configured.
+The app gracefully handles API errors with user-friendly messages and local error logging for debugging.

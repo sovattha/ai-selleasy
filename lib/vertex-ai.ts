@@ -64,28 +64,28 @@ interface GeneratedCopy {
 export async function generateItemCopy(images: Buffer[]): Promise<GeneratedCopy> {
   try {
     const prompt = `
-      Analyse ces images de produit et génère une annonce pour Ricardo.ch en français.
+      Analyze these product images and generate a marketplace listing in English.
 
-      Génère:
-      1. Un titre accrocheur et descriptif (max 60 caractères)
-      2. Une description détaillée qui donne envie d'acheter
-      3. La catégorie du produit
-      4. La marque (si visible)
-      5. Le modèle (si identifiable)
-      6. Un prix suggéré en CHF
+      Generate:
+      1. A catchy and descriptive title (max 60 characters)
+      2. A detailed description that makes people want to buy
+      3. The product category
+      4. The brand (if visible)
+      5. The model (if identifiable)
+      6. A suggested price in USD
 
-      Réponds en JSON avec les clés: title, description, category, brand, model, price
+      Respond in JSON with keys: title, description, category, brand, model, price
 
-      IMPORTANT - Style d'écriture:
-      - Écris comme un particulier qui vend ses affaires, pas comme un vendeur professionnel
-      - Ton naturel et humain, sans jargon commercial
-      - Mentionne pourquoi tu vends (déménagement, plus besoin, etc.)
-      - Sois honnête sur l'état, mentionne les petits défauts s'il y en a
-      - Utilise "je vends", "j'ai acheté", "fonctionne parfaitement"
-      - Évite les superlatifs excessifs et le marketing
+      IMPORTANT - Writing style:
+      - Write like an individual selling their belongings, not a professional seller
+      - Natural and human tone, without commercial jargon
+      - Mention why you're selling (moving, no longer needed, etc.)
+      - Be honest about condition, mention small defects if any
+      - Use "I'm selling", "I bought", "works perfectly"
+      - Avoid excessive superlatives and marketing speak
 
-      Exemple de ton souhaité:
-      "Je vends mon aspirateur Dyson car je déménage. Il fonctionne parfaitement, aspire super bien. Quelques petites rayures sur le plastique mais rien de grave. Très pratique pour les poils d'animaux. Vendu avec tous les accessoires d'origine."
+      Example tone:
+      "I'm selling my Dyson vacuum because I'm moving. It works perfectly, suction is great. Some minor scratches on the plastic but nothing serious. Very practical for pet hair. Comes with all original accessories."
     `
 
     const text = await callGeminiAPI(prompt, images)
@@ -95,8 +95,8 @@ export async function generateItemCopy(images: Buffer[]): Promise<GeneratedCopy>
       if (jsonMatch) {
         const generatedData = JSON.parse(jsonMatch[0])
         return {
-          title: generatedData.title || 'Titre généré',
-          description: generatedData.description || 'Description générée',
+          title: generatedData.title || 'Generated Title',
+          description: generatedData.description || 'Generated Description',
           price: generatedData.price || undefined,
           category: generatedData.category || undefined,
           brand: generatedData.brand || undefined,
@@ -109,8 +109,8 @@ export async function generateItemCopy(images: Buffer[]): Promise<GeneratedCopy>
 
     const lines = text.split('\n').filter(line => line.trim())
     return {
-      title: lines.find(line => line.toLowerCase().includes('title'))?.replace(/.*title:?\s*/i, '') || 'Titre généré par IA',
-      description: lines.slice(1).join('\n') || 'Description générée par IA basée sur les images du produit.',
+      title: lines.find(line => line.toLowerCase().includes('title'))?.replace(/.*title:?\s*/i, '') || 'AI Generated Title',
+      description: lines.slice(1).join('\n') || 'AI generated description based on product images.',
     }
   } catch (error) {
     console.error('Error generating copy with Vertex AI:', error)

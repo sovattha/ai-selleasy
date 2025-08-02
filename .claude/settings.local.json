@@ -11,7 +11,6 @@
       "Bash(gcloud services enable:*)",
       "Bash(npm install:*)",
       "Bash(npm run dev:*)",
-      "WebFetch(domain:www.ricardo.ch)",
       "Bash(mv:*)",
       "Bash(npm run build:*)",
       "Bash(git add:*)",

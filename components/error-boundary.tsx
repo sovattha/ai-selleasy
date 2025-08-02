@@ -76,10 +76,10 @@ function DefaultErrorFallback({ error, reset }: { error?: Error; reset: () => vo
       <div className="max-w-md w-full bg-slate-800 rounded-lg p-6 text-center">
         <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
         <h2 className="text-xl font-bold text-slate-50 mb-2">
-          Oops, quelque chose s'est mal passé
+          Oops, something went wrong
         </h2>
         <p className="text-slate-400 mb-6">
-          Une erreur inattendue s'est produite. Vos données sont sauvegardées localement.
+          An unexpected error occurred. Your data is saved locally.
         </p>
         
         {process.env.NODE_ENV === 'development' && error && (
@@ -93,14 +93,14 @@ function DefaultErrorFallback({ error, reset }: { error?: Error; reset: () => vo
             onClick={reset}
             className="w-full px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg font-medium transition-colors"
           >
-            Réessayer
+            Try Again
           </button>
           <button
             onClick={handleReload}
             className="w-full px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
           >
             <RefreshCw className="w-4 h-4" />
-            Recharger la page
+            Reload Page
           </button>
         </div>
       </div>
